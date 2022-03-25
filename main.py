@@ -1,13 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-signal = input("Enter The Bits :")
-sign = input('Enter The First Sign (+,-):')
-original = [bit for bit in signal]
-newSignal = [bit for bit in signal]
-finalSignal = []
-i = 0
-
 
 def printSignal():
     # Figure 1
@@ -111,4 +104,12 @@ def generate():
     printSignal()
 
 
-generate()
+if __name__ == "__main__":
+    signal = input("Enter The Bits :")
+    sign = input('Enter The First Sign (+,-):')
+
+    original = [bit for bit in signal]
+    newSignal = [bit for bit in signal]
+    finalSignal = []
+    i = 0
+    generate()
