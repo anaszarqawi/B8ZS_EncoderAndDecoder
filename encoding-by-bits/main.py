@@ -87,7 +87,7 @@ def convert():
     return finalSignal
 
 
-def generate():
+def encode():
     global i
     global newSignal
     while i < len(newSignal):
@@ -112,4 +112,4 @@ if __name__ == "__main__":
     newSignal = [bit for bit in signal]
     finalSignal = []
     i = 0
-    generate()
+    encode()
