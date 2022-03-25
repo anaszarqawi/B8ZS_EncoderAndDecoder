@@ -1,13 +1,18 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+signal = input("Enter The Bits :")
+sign = input('Enter The First Sign (+,-):')
+original = [bit for bit in signal]
+newSignal = [bit for bit in signal]
+finalSignal = []
+i = 0
 
-def printSignal(signal, orig):
-    orig = [int(bit) for bit in orig]
 
+def printSignal():
     # Figure 1
-    xs = np.repeat(range(len(orig)), 2)
-    ys = np.repeat(orig, 2)
+    xs = np.repeat(range(len(original)), 2)
+    ys = np.repeat(original, 2)
     xs = xs[1:]
     ys = ys[:-1]
     xs = np.append(xs, xs[-1] + 1)
@@ -15,18 +20,18 @@ def printSignal(signal, orig):
     plt.subplot(2, 1, 1)
     plt.plot(xs, ys)
     plt.grid(linewidth=0.5)
-    plt.title("Original Signal")
+    plt.title("".join(original).replace('', '    '))
 
     # Figure 2
-    xs = np.repeat(range(len(signal)), 2)
-    ys = np.repeat(signal, 2)
+    xs = np.repeat(range(len(finalSignal)), 2)
+    ys = np.repeat(finalSignal, 2)
     xs = xs[1:]
     ys = ys[:-1]
     xs = np.append(xs, xs[-1] + 1)
     ys = np.append(ys, ys[-1])
     plt.subplot(2, 1, 2)
     plt.grid(linewidth=0.5)
-    plt.title("B8ZS Signal")
+    plt.title("".join(signal).replace('', '    '))
     plt.plot(xs, ys)
 
     # plt.gcf().set_size_inches(30, 8)
@@ -35,57 +40,50 @@ def printSignal(signal, orig):
     plt.show()
 
 
-def changeZeros(signal, sign):
-    temp = "".join(signal)
-    print(sign)
-    if temp.find("00000000") == -1:
-        print("ERROR: No sequence of 8 bits detected")
-    else:
-        if(sign == '+'):
-            temp = temp.replace('00000000', '000+-0-+')
-        else:
-            temp = temp.replace('00000000', '000-+0+-')
-
-    return temp
+def getIndexOfZeros():
+    return signal.find("00000000")
 
 
-def changeSign(sign):
+def changeSign():
+    global sign
     return '-' if sign == '+' else '+'
 
 
-def changeOnes(signal, sign):
-    signal = [bit for bit in signalList]
-
-    for i in range(len(signal)):
-        if int(signal[i]) == 1:
-            if sign == '+':
-                signal[i] = '+'
-                sign = changeSign(sign)
-            elif sign == '-':
-                signal[i] = '-'
-                sign = changeSign(sign)
+def changeZeros():
+    global i
+    global signal
+    global sign
+    i += 7
+    signal = "".join(newSignal)
+    sign = changeSign()
+    if signal.find("00000000") == -1:
+        print("ERROR: No sequence of 8 bits detected")
+    else:
+        if(sign == '+'):
+            signal = signal.replace('00000000', '000+-0-+')
         else:
-            continue
-    signal = changeZeros(signal, sign)
-    return signal
+            signal = signal.replace('00000000', '000-+0+-')
+
+    sign = changeSign()
+    return [bit for bit in signal]
 
 
-def menu():
-    bits = input("Enter The Bits : ")
-    sign = input("Enter First Sign (+,-): ")
-    # choice = int(input("1. Encoding\n"
-    #                    "2. Decoding\n"
-    #                    "Enter You Choice : "))
-    return bits, sign
+def changeOnes():
+    global sign
+    global i
+    if int(signal[i]) == 1:
+        if sign == '+':
+            newSignal[i] = '+'
+            sign = changeSign()
+        elif sign == '-':
+            newSignal[i] = '-'
+            sign = changeSign()
+        else:
+            return
 
 
-if __name__ == "__main__":
-    signalList, sign = "110000000011001", '+'
-
-    signal = changeOnes(signalList, sign)
-    finalSignal = []
-
-    for bit in signal:
+def convert():
+    for bit in newSignal:
         if bit == '+':
             finalSignal.append(1)
         elif bit == '-':
@@ -93,5 +91,24 @@ if __name__ == "__main__":
         else:
             finalSignal.append(0)
 
-    printSignal(finalSignal, signalList)
-    print(finalSignal)
+    return finalSignal
+
+
+def generate():
+    global i
+    global newSignal
+    while i < len(newSignal):
+        if getIndexOfZeros() == -1:
+            changeOnes()
+        elif i < getIndexOfZeros():
+            changeOnes()
+        else:
+            newSignal = changeZeros()
+        i += 1
+
+    signal = "".join(newSignal)
+    convert()
+    printSignal()
+
+
+generate()
