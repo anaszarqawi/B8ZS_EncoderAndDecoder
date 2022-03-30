@@ -8,7 +8,7 @@ class Signal:
 
     def __init__(self, RawSignal, sign):
         self.RawSignal = RawSignal
-        self.original = [bit for bit in RawSignal]
+        self.original = [int(bit) for bit in RawSignal]
         self.signal = [bit for bit in RawSignal]
         self.sign = sign
 
@@ -88,15 +88,27 @@ class Signal:
             else:
                 return
 
-    def changeB8ZS(self):
-        if self.RawSignal.find("000+-0-+") == -1 and self.RawSignal.find("000-+0+-") == -1:
+    # def changeB8ZS(self):
+    #     if self.RawSignal.find("000+-0-+") == -1 and self.RawSignal.find("000-+0+-") == -1:
+    #         print("ERROR: No B8ZS a line coding detected")
+    #         exit(-1)
+    #     else:
+    #         self.RawSignal = self.RawSignal.replace('000+-0-+', '00000000')
+    #         self.RawSignal = self.RawSignal.replace('000-+0+-', '00000000')
+    #         self.RawSignal = self.RawSignal.replace('-', '1')
+    #         self.RawSignal = self.RawSignal.replace('+', '1')
+
+    def changeB8ZS(self, s):
+        if s.find("0001-10-11") == -1 and s.find("000-1101-1") == -1:
             print("ERROR: No B8ZS a line coding detected")
             exit(-1)
         else:
-            self.RawSignal = self.RawSignal.replace('000+-0-+', '00000000')
-            self.RawSignal = self.RawSignal.replace('000-+0+-', '00000000')
-            self.RawSignal = self.RawSignal.replace('-', '1')
-            self.RawSignal = self.RawSignal.replace('+', '1')
+            s = s.replace('0001-10-11', '00000000')
+            s = s.replace('000-1101-1', '00000000')
+            s = s.replace('-1', '1')
+            s = s.replace('1', '1')
+
+        return s
 
     def encode(self):
         while self.i < len(self.signal):
@@ -107,10 +119,12 @@ class Signal:
             self.i += 1
 
         self.finalSignal = self.convert(self.signal).copy()
+        print(f"\nThe Signal after Encoding : {self.finalSignal}")
         self.printSignal(self.original, self.finalSignal)
 
     def decode(self):
-        self.changeB8ZS()
-        self.finalSignal = self.convert(self.RawSignal).copy()
-        self.original = self.convert(self.original).copy()
+        strSignal = "".join(self.RawSignal)
+        strSignal = self.changeB8ZS(strSignal)
+        self.finalSignal = self.convert(strSignal).copy()
+        print(f"\nThe Signal after Decoding : {self.finalSignal}")
         self.printSignal(self.original, self.finalSignal)

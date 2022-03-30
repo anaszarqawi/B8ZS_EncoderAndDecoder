@@ -4,12 +4,13 @@ import signals
 def menu():
     choice = int(input("1. Encoding\n"
                        "2. Decoding\n"
-                       "Enter You Choice : "))
-    signal = input("Enter The Signal : ")
+                       "Enter Your Choice : "))
     if choice == 1:
+        signal = input("Enter The Signal : ")
         sign = input('Enter The First Sign (+,-):')
         return signal, sign, choice
     elif choice == 2:
+        signal = input("Enter The Signal : ").split()
         sign = '+'
         return signal, sign, choice
 
