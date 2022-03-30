@@ -13,7 +13,7 @@ def printSignal():
     plt.subplot(2, 1, 1)
     plt.plot(xs, ys)
     plt.grid(linewidth=0.5)
-    plt.title("".join(original).replace('', '    '))
+    plt.title(original)
 
     # Figure 2
     xs = np.repeat(range(len(finalSignal)), 2)
@@ -24,7 +24,7 @@ def printSignal():
     ys = np.append(ys, ys[-1])
     plt.subplot(2, 1, 2)
     plt.grid(linewidth=0.5)
-    plt.title("".join(signal).replace('', '    '))
+    plt.title(finalSignal)
     plt.plot(xs, ys)
 
     # plt.gcf().set_size_inches(30, 8)
@@ -34,7 +34,8 @@ def printSignal():
 
 
 def getIndexOfZeros():
-    return signal.find("00000000")
+    temp = "".join(signal)
+    return temp.find("00000000")
 
 
 def changeSign():
@@ -47,7 +48,7 @@ def changeZeros():
     global signal
     global sign
     i += 7
-    signal = "".join(newSignal)
+    signal = "".join(signal)
     sign = changeSign()
     if signal.find("00000000") == -1:
         print("ERROR: No sequence of 8 bits detected")
@@ -66,17 +67,19 @@ def changeOnes():
     global i
     if int(signal[i]) == 1:
         if sign == '+':
-            newSignal[i] = '+'
+            signal[i] = '+'
             sign = changeSign()
+
         elif sign == '-':
-            newSignal[i] = '-'
+            signal[i] = '-'
             sign = changeSign()
+
         else:
             return
 
 
 def convert():
-    for bit in newSignal:
+    for bit in signal:
         if bit == '+':
             finalSignal.append(1)
         elif bit == '-':
@@ -89,27 +92,39 @@ def convert():
 
 def encode():
     global i
-    global newSignal
-    while i < len(newSignal):
-        if getIndexOfZeros() == -1:
-            changeOnes()
-        elif i < getIndexOfZeros():
+    global signal
+
+    while i < len(signal):
+        if getIndexOfZeros() == -1 or i < getIndexOfZeros():
             changeOnes()
         else:
-            newSignal = changeZeros()
+            signal = changeZeros()
         i += 1
 
-    signal = "".join(newSignal)
-    convert()
+    signal = convert()
     printSignal()
 
 
-if __name__ == "__main__":
-    signal = input("Enter The Bits :")
+def menu():
+    signal = input("Enter The Signal : ")
     sign = input('Enter The First Sign (+,-):')
+    choice = int(input("1. Encoding\n"
+                       "2. Decoding\n"
+                       "Enter You Choice : "))
 
-    original = [bit for bit in signal]
-    newSignal = [bit for bit in signal]
+    return signal, sign, choice
+
+
+if __name__ == "__main__":
+    # signal => "01010011"
+    RawSignal, sign, choice = menu()
+
+    original = [int(bit) for bit in RawSignal]
+    signal = [bit for bit in RawSignal]
     finalSignal = []
     i = 0
-    encode()
+
+    if choice == 1:
+        encode()
+    elif choice == 2:
+        decode()

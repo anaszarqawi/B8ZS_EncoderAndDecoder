@@ -16,7 +16,7 @@ def changeZeros():
 
 def changeB8ZS():
     global signal
-    if signal.find("000+-0-+") == -1 and signal.find("000-+0+-") == -1:
+    if signal.find("000+-0-+") and signal.find("000-+0+-") == -1:
         print("ERROR: No B8ZS a line coding detected")
         exit(-1)
     else:
