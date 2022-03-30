@@ -1,2 +1,4 @@
 # B8ZS Encoder And Decoder
-> Note: You have to install matplotlib before running the code
+> Note: Make sure you have matplotlib installed before running the code
+
+Sample of Output
