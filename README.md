@@ -1,4 +1,5 @@
 # B8ZS Encoder And Decoder
+<<<<<<< HEAD
 
 > Make sure you have matplotlib library installed before running the code
 
@@ -30,3 +31,6 @@ The Signal after Decoding : [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 
 ```
 
 ![image](https://user-images.githubusercontent.com/75158182/160888260-1e695a88-4b4f-4f35-95d0-4d27fce0e3b0.png)
+=======
+> Make sure you have matplotlib library installed before running the code
+>>>>>>> 24b6f5acb674cfe74081e5a78c56ae81a745404b
