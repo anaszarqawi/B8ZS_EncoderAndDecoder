@@ -40,6 +40,7 @@ class Signal:
         plt.title(s2)
 
         # Show 2 Figs
+        plt.tight_layout()
         plt.show()
 
     # this function converts a signal from ['+', '-', '1', '0'] to [1, -1, 1, 0]
